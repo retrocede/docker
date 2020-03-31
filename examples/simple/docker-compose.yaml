@@ -1,4 +1,8 @@
 version: "3"
+
+networks:
+  directus:
+
 services:
   #
   # Database
@@ -12,6 +16,8 @@ services:
       MYSQL_ROOT_PASSWORD: "directus"
     ports:
       - 3306:3306
+    networks:
+      - directus
 
   #
   # Directus instance.
@@ -57,5 +63,5 @@ services:
       - ./data/config:/var/directus/config
       - ./data/uploads:/var/directus/public/uploads
 
-    links:
-      - mysql:mysql
+    networks:
+      - directus
