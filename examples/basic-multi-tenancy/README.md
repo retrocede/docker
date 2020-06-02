@@ -26,7 +26,7 @@ Create tenants by accessing `https://localhost:8443/admin/#/install`
 
 This example executes two different databases `project1` and `project2`.
 
-**Please make sure you understand how docker networking works before raising issues related to database connectivity issues.**
+**Please make sure you understand how docker networking works before raising database connectivity related issues.**
 
 While you can still connect to an external database, in this example the database `Host` field should be either `project1` or `project2` if you want to use the example's databases ([see composer docs](https://docs.docker.com/compose/networking/)).
 
