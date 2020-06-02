@@ -1,4 +1,4 @@
-# Simple
+# Basic Multi-Tenancy
 
 ## Prerequisites
 
