@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Make sure docker and docker-compose is available
-- Make sure nothing is running on port 8080 and 3306
+- Make sure nothing is running on port 8443
   - If necessary, adjust the exposed ports on docker-compose.yml file
 
 ## Make sure you have the latest images
@@ -42,4 +42,4 @@ docker-compose run directus install
 
 ## Accessing
 
-- [Directus at http://localhost:8080/](http://localhost:8080/)
+- [Directus](https://localhost:8443/)

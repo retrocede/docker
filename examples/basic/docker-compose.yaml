@@ -1,22 +1,5 @@
 version: "3"
-
-networks:
-  directus:
-    
 services:
-  #
-  # Load balancer to accept requests from app and app on port 80
-  # based on the requested hostname
-  #
-  proxy:
-    image: jwilder/nginx-proxy:alpine
-    ports:
-      - 80:80
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    networks:
-      - directus
-
   #
   # Database
   #
@@ -27,10 +10,10 @@ services:
       MYSQL_USER: "directus"
       MYSQL_PASSWORD: "directus"
       MYSQL_ROOT_PASSWORD: "directus"
-    ports:
-      - 3306:3306    
+    #ports: # Expose it if you want to access MySQL server
+    #  - 3306:3306
     networks:
-      - directus
+      - database
 
   #
   # Directus instance.
@@ -40,9 +23,6 @@ services:
   directus:
     image: directus/directus:v8-apache
     environment:
-      # Load balancer
-      VIRTUAL_HOST: "directus.localtest.me"
-
       # App
       DIRECTUS_ENV: "production"
 
@@ -58,24 +38,27 @@ services:
       DIRECTUS_DATABASE_USERNAME: "directus"
       DIRECTUS_DATABASE_PASSWORD: "directus"
 
-      #
-      # These are highly recommended for proper cloud native
-      # installations, but not in this example
-      #
-      # Storage
-      #DIRECTUS_STORAGE_ADAPTER: "s3"
-      #DIRECTUS_STORAGE_ROOT: "/images/"
-      #DIRECTUS_STORAGE_ROOTURL: "http://cdn.localtest.me/images"
-      #DIRECTUS_STORAGE_THUMBROOT: "/images/thumbs/"
-      #DIRECTUS_STORAGE_KEY: "storage_key"
-      #DIRECTUS_STORAGE_SECRET: "storage_secret"
-      #DIRECTUS_STORAGE_REGION: "us-east-1"
-      #DIRECTUS_STORAGE_BUCKET: "cdn.localtest.me"
-
     # Uploads gets saved in uploads folder
     volumes:
       - ./data/config:/var/directus/config
       - ./data/uploads:/var/directus/public/uploads
-    
+
     networks:
-      - directus
+      - database
+      - http
+
+  #
+  # Caddy for HTTPS
+  # https://caddyserver.com/docs/
+  #
+  caddy:
+    image: caddy/caddy
+    command: "caddy reverse-proxy --to http://directus"
+    ports:
+      - 8443:443
+    networks:
+      - http
+
+networks:
+  database:
+  http:
