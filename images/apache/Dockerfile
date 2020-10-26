@@ -47,6 +47,7 @@ RUN \
   directus-setup install-dependencies && \
   composer require aws/aws-sdk-php && \
   composer require league/flysystem-aws-s3-v3 && \
+  composer require league/flysystem-azure-blob-storage && \
   ( find . -type d -name ".git" && find . -name ".gitignore" && find . -name ".gitmodules" ) | xargs rm -rf
 
 #
